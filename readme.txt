@@ -1,0 +1,1 @@
+export N8N_CUSTOM_EXTENSIONS=./dist

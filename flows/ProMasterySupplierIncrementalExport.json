@@ -1,0 +1,234 @@
+{
+  "name": "ProMasterySupplierIncrementalExport",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "419a3a88-addb-492c-89fc-2a87f23ff535",
+      "name": "ProMastery Subscription",
+      "type": "CUSTOM.ProMasteryTrigger",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        260
+      ],
+      "credentials": {
+        "ProMasteryAccess": {
+          "id": "xainraFksdRMFKl9",
+          "name": "ProMastery Access account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4",
+          "mode": "list",
+          "cachedResultName": "ProMasterySuppliers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $input.item.json.name }}",
+            "description": "={{ $input.item.json.description}}",
+            "zipCode": "={{ $input.item.json.zipCode}}",
+            "address": "={{ $input.item.json.address}}",
+            "city": "={{ $input.item.json.city}}",
+            "country": "={{ $input.item.json.country}}"
+          },
+          "matchingColumns": [
+            "name"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "zipCode",
+              "displayName": "zipCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5d2727c2-f16e-466d-81ea-621a9b95ccc6",
+      "name": "Add Row to Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        820,
+        80
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Pu9AWpSM6cEFbQ2B",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.recordDefinitionId }}",
+                    "rightValue": "supplier",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "supplier"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "16a049d1-e31c-45da-8e33-8deaf4f26bf7",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        200,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "  return $input.item.json.recordData\n"
+      },
+      "id": "3c4b0913-822f-4251-ac5f-ded601577c25",
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        80
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "ProMastery Subscription": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Add Row to Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "2ab9a0e6-cb60-4c2c-b8e5-73b72ba1a4ac",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "22f05d6b21739033d5d66d1d70fa004409bd796ebb860dfcd04817b7a7fb8da3"
+  },
+  "id": "vLCWJ0aJgllJrpi6",
+  "tags": []
+}

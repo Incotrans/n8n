@@ -1,0 +1,210 @@
+{
+  "name": "ProMasterySupplierTotalExport",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "89de6b2e-0a82-4567-9af5-2800ffa739c0",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        20,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "supplier",
+        "fields": [
+          "name",
+          "description"
+        ]
+      },
+      "id": "78de8a5f-19e9-403b-afbb-1d35eb9ad745",
+      "name": "ProMastery",
+      "type": "CUSTOM.ProMastery",
+      "typeVersion": 1,
+      "position": [
+        220,
+        200
+      ],
+      "credentials": {
+        "ProMasteryAccess": {
+          "id": "xainraFksdRMFKl9",
+          "name": "ProMastery Access account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4",
+          "mode": "list",
+          "cachedResultName": "ProMasterySuppliers",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 151323490,
+          "mode": "list",
+          "cachedResultName": "ExportTotal",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mhC40RicuNC2gbNXT3SzS7FgtzKR12JMf4vZdLCOJy4/edit#gid=151323490"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "description": "={{ $json.description }}",
+            "address": "={{ $json.address }}",
+            "zipCode": "={{ $json.zipCode }}",
+            "city": "={{ $json.city }}",
+            "country": "={{ $json.country }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "zipCode",
+              "displayName": "zipCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ae62aedf-564f-4c4d-b958-68ce8af9ccbd",
+      "name": "Export Data To Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        500,
+        140
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Pu9AWpSM6cEFbQ2B",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "585385ed-c4a5-4b0e-8729-45a1cc71da1a",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        400
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "ProMastery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ProMastery": {
+      "main": [
+        [
+          {
+            "node": "Export Data To Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "ProMastery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "14c9f7d1-55bc-4bd9-91e1-1cc7894d9e09",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "22f05d6b21739033d5d66d1d70fa004409bd796ebb860dfcd04817b7a7fb8da3"
+  },
+  "id": "bggoc6cGy3A37snQ",
+  "tags": []
+}
